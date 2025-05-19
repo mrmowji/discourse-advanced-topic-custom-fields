@@ -8,6 +8,7 @@
 # url: https://github.com/pavilionedu/discourse-topic-custom-fields
 
 enabled_site_setting :topic_custom_field_enabled
+enabled_site_setting :topic_custom_field_categories
 register_asset "stylesheets/common.scss"
 
 ##
@@ -24,6 +25,7 @@ after_initialize do
   module ::TopicCustomFields
     FIELD_NAME = SiteSetting.topic_custom_field_name
     FIELD_TYPE = SiteSetting.topic_custom_field_type
+    CATEGORIES = SiteSetting.topic_custom_field_categories.split('|').map(&:to_i)
   end
 
   ##

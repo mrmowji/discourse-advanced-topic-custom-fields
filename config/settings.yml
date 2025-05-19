@@ -14,3 +14,9 @@ plugins:
       - integer
       - boolean
       - json
+  topic_custom_field_categories:
+    default: []
+    client: true
+    type: list
+    list_type: category
+    description: "Categories where the custom field is enabled."
