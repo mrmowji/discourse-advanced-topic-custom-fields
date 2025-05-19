@@ -1,28 +1,24 @@
 plugins:
-  topic_custom_field_enabled:
+  topic_heuristic_value_enabled:
     default: true
     client: true
-  topic_custom_field_name:
-    default: 'price'
+  topic_heuristic_value_field_name:
+    default: 'heuristic_value'
     client: true
-  topic_custom_field_type:
+    hidden: true
+  topic_heuristic_value_field_type:
     default: 'integer'
     client: true
-    type: enum
-    choices:
-      - string
-      - integer
-      - boolean
-      - json
-  topic_custom_field_categories:
+    hidden: true
+  topic_heuristic_value_field_categories:
     default: []
     client: true
     type: list
     list_type: category
-    description: "Categories where the custom field is enabled."
-  topic_custom_field_allowed_groups:
+    description: "Categories where the heuristic value is enabled."
+  topic_heuristic_value_field_allowed_groups:
     default: "staff"
     client: true
     type: list
     list_type: group
-    description: "Groups that are allowed to edit the custom field value."
+    description: "Groups that are allowed to edit the heuristic value."

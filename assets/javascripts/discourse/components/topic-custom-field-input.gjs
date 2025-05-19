@@ -9,10 +9,11 @@ import i18n from "discourse-common/helpers/i18n";
 export default class TopicCustomFieldInput extends Component {
   @service siteSettings;
   @service currentUser;
-  @readOnly("siteSettings.topic_custom_field_name") fieldName;
-  @readOnly("siteSettings.topic_custom_field_type") fieldType;
-  @readOnly("siteSettings.topic_custom_field_allowed_groups") allowedGroups;
-  @readOnly("siteSettings.topic_custom_field_categories") allowedCategories;
+  @readOnly("siteSettings.topic_heuristic_value_field_name") fieldName;
+  @readOnly("siteSettings.topic_heuristic_value_field_type") fieldType;
+  @readOnly("siteSettings.topic_heuristic_value_field_allowed_groups") allowedGroups;
+  @readOnly("siteSettings.topic_heuristic_value_field_categories") allowedCategories;
+  @readOnly("siteSettings.topic_heuristic_value_enabled") isHeuristicValueEnabled;
 
   get userGroups() {
     return (this.currentUser?.groups || []).map(g => g.id);
@@ -23,17 +24,15 @@ export default class TopicCustomFieldInput extends Component {
 
     const userGroups = this.userGroups;
     const canEdit = userGroups.some(g => allowedGroups.includes(g));
-    console.log("[CustomField] userGroups:", userGroups, "allowedGroups:", allowedGroups, "canEdit:", canEdit);
+
     return canEdit;
   }
 
   get isAllowedCategory() {
-    console.log({allowedCategories: this.allowedCategories});
     const allowedCategories = (this.allowedCategories.length ? this.allowedCategories.split("|") : []).map(c => parseInt(c, 10)).filter(Number.isInteger);
 
     const categoryId = this.args.categoryId;
     const isAllowed = allowedCategories && allowedCategories.length > 0 && categoryId && allowedCategories.includes(categoryId);
-    console.log("[CustomField] allowedCategories:", allowedCategories, "categoryId:", categoryId, "isAllowed:", isAllowed);
     if (!allowedCategories || allowedCategories.length === 0) {
       return false;
     }
@@ -44,7 +43,7 @@ export default class TopicCustomFieldInput extends Component {
   }
 
   get canShowField() {
-    return this.canEditField && this.isAllowedCategory;
+    return this.isHeuristicValueEnabled && this.canEditField && this.isAllowedCategory;
   }
 
   <template>
@@ -63,7 +62,7 @@ export default class TopicCustomFieldInput extends Component {
           @type="number"
           @value={{@fieldValue}}
           placeholder={{i18n
-            "topic_custom_field.placeholder"
+            "topic_heuristic_value.placeholder"
             field=this.fieldName
           }}
           class="topic-custom-field-input small"
@@ -76,7 +75,7 @@ export default class TopicCustomFieldInput extends Component {
           @type="text"
           @value={{@fieldValue}}
           placeholder={{i18n
-            "topic_custom_field.placeholder"
+            "topic_heuristic_value.placeholder"
             field=this.fieldName
           }}
           class="topic-custom-field-input large"
@@ -89,7 +88,7 @@ export default class TopicCustomFieldInput extends Component {
           @value={{@fieldValue}}
           {{on "change" (action @onChangeField value="target.value")}}
           placeholder={{i18n
-            "topic_custom_field.placeholder"
+            "topic_heuristic_value.placeholder"
             field=this.fieldName
           }}
           class="topic-custom-field-textarea"

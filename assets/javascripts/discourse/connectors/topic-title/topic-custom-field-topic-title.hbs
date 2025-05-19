@@ -1,7 +1,11 @@
 {{#unless this.topic.editingTopic}}
-  <span>{{i18n
-      "topic_custom_field.label"
-      field=this.fieldName
-      value=this.fieldValue
-    }}</span>
+  {{#if this.siteSettings.topic_heuristic_value_enabled}}
+    {{#if this.isAllowedCategory}}
+      <span>{{i18n
+          "topic_heuristic_value.label"
+          field=this.fieldName
+          value=this.fieldValue
+      }}</span>
+    {{/if}}
+  {{/if}}
 {{/unless}}

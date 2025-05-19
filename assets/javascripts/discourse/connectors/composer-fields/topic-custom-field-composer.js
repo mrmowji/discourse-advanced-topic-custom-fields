@@ -3,22 +3,13 @@ import { action } from "@ember/object";
 import { alias } from "@ember/object/computed";
 import { service } from "@ember/service";
 
-/*
- * type:        step
- * number:      5
- * title:       Show an input in the composer
- * description: If your field can be edited by users, you need to show an input in the composer.
- * references:  app/assets/javascripts/discourse/app/templates/composer.hbs
- */
-
 export default class TopicCustomFieldComposer extends Component {
   @service siteSettings;
-  @alias("siteSettings.topic_custom_field_name") fieldName;
+  @alias("siteSettings.topic_heuristic_value_field_name") fieldName;
   @alias("args.outletArgs.model") composerModel;
   @alias("composerModel.topic") topic;
 
   get categoryId() {
-    console.log("Composer model:", this.composerModel);
     return this.composerModel?.categoryId;
   }
 

@@ -1,5 +1,6 @@
 en:
   js:
-    topic_custom_field:
-      label: "%{field}: %{value}"
-      placeholder: "Enter a %{field}"
+    topic_heuristic_value:
+      label: "Heuristic Value: %{value}"
+      placeholder: "Enter a heuristic value"
+      title: "Heuristic Value"
