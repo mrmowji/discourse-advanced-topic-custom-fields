@@ -8,55 +8,93 @@ import i18n from "discourse-common/helpers/i18n";
 
 export default class TopicCustomFieldInput extends Component {
   @service siteSettings;
+  @service currentUser;
   @readOnly("siteSettings.topic_custom_field_name") fieldName;
   @readOnly("siteSettings.topic_custom_field_type") fieldType;
+  @readOnly("siteSettings.topic_custom_field_allowed_groups") allowedGroups;
+  @readOnly("siteSettings.topic_custom_field_categories") allowedCategories;
+
+  get userGroups() {
+    return (this.currentUser?.groups || []).map(g => g.id);
+  }
+
+  get canEditField() {
+    const allowedGroups = (this.allowedGroups.length ? this.allowedGroups.split("|") : []).map(g => parseInt(g, 10)).filter(Number.isInteger);
+
+    const userGroups = this.userGroups;
+    const canEdit = userGroups.some(g => allowedGroups.includes(g));
+    console.log("[CustomField] userGroups:", userGroups, "allowedGroups:", allowedGroups, "canEdit:", canEdit);
+    return canEdit;
+  }
+
+  get isAllowedCategory() {
+    console.log({allowedCategories: this.allowedCategories});
+    const allowedCategories = (this.allowedCategories.length ? this.allowedCategories.split("|") : []).map(c => parseInt(c, 10)).filter(Number.isInteger);
+
+    const categoryId = this.args.categoryId;
+    const isAllowed = allowedCategories && allowedCategories.length > 0 && categoryId && allowedCategories.includes(categoryId);
+    console.log("[CustomField] allowedCategories:", allowedCategories, "categoryId:", categoryId, "isAllowed:", isAllowed);
+    if (!allowedCategories || allowedCategories.length === 0) {
+      return false;
+    }
+    if (!categoryId) {
+      return false;
+    }
+    return allowedCategories.includes(categoryId);
+  }
+
+  get canShowField() {
+    return this.canEditField && this.isAllowedCategory;
+  }
 
   <template>
-    {{#if (eq this.fieldType "boolean")}}
-      <Input
-        @type="checkbox"
-        @checked={{@fieldValue}}
-        {{on "change" (action @onChangeField value="target.checked")}}
-      />
-      <span>{{this.fieldName}}</span>
-    {{/if}}
+    {{#if this.canShowField}}
+      {{#if (eq this.fieldType "boolean")}}
+        <Input
+          @type="checkbox"
+          @checked={{@fieldValue}}
+          {{on "change" (action @onChangeField value="target.checked")}}
+        />
+        <span>{{this.fieldName}}</span>
+      {{/if}}
 
-    {{#if (eq this.fieldType "integer")}}
-      <Input
-        @type="number"
-        @value={{@fieldValue}}
-        placeholder={{i18n
-          "topic_custom_field.placeholder"
-          field=this.fieldName
-        }}
-        class="topic-custom-field-input small"
-        {{on "change" (action @onChangeField value="target.value")}}
-      />
-    {{/if}}
+      {{#if (eq this.fieldType "integer")}}
+        <Input
+          @type="number"
+          @value={{@fieldValue}}
+          placeholder={{i18n
+            "topic_custom_field.placeholder"
+            field=this.fieldName
+          }}
+          class="topic-custom-field-input small"
+          {{on "change" (action @onChangeField value="target.value")}}
+        />
+      {{/if}}
 
-    {{#if (eq this.fieldType "string")}}
-      <Input
-        @type="text"
-        @value={{@fieldValue}}
-        placeholder={{i18n
-          "topic_custom_field.placeholder"
-          field=this.fieldName
-        }}
-        class="topic-custom-field-input large"
-        {{on "change" (action @onChangeField value="target.value")}}
-      />
-    {{/if}}
+      {{#if (eq this.fieldType "string")}}
+        <Input
+          @type="text"
+          @value={{@fieldValue}}
+          placeholder={{i18n
+            "topic_custom_field.placeholder"
+            field=this.fieldName
+          }}
+          class="topic-custom-field-input large"
+          {{on "change" (action @onChangeField value="target.value")}}
+        />
+      {{/if}}
 
-    {{#if (eq this.fieldType "json")}}
-      <Textarea
-        @value={{@fieldValue}}
-        {{on "change" (action @onChangeField value="target.value")}}
-        placeholder={{i18n
-          "topic_custom_field.placeholder"
-          field=this.fieldName
-        }}
-        class="topic-custom-field-textarea"
-      />
+      {{#if (eq this.fieldType "json")}}
+        <Textarea
+          @value={{@fieldValue}}
+          {{on "change" (action @onChangeField value="target.value")}}
+          placeholder={{i18n
+            "topic_custom_field.placeholder"
+            field=this.fieldName
+          }}
+          class="topic-custom-field-textarea"
+        />
+      {{/if}}
     {{/if}}
   </template>
 }

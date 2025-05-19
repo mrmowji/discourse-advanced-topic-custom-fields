@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-# name: discourse-topic-custom-fields
-# about: Discourse plugin showing how to add custom fields to Discourse topics
-# version: 1.0
-# authors: Angus McLeod
-# contact email: angus@pavilion.tech
-# url: https://github.com/pavilionedu/discourse-topic-custom-fields
+# name: discourse-advanced-topic-custom-fields
+# url: https://github.com/mrmowji/discourse-advanced-topic-custom-fields
 
 enabled_site_setting :topic_custom_field_enabled
 enabled_site_setting :topic_custom_field_categories
@@ -25,7 +21,9 @@ after_initialize do
   module ::TopicCustomFields
     FIELD_NAME = SiteSetting.topic_custom_field_name
     FIELD_TYPE = SiteSetting.topic_custom_field_type
-    CATEGORIES = SiteSetting.topic_custom_field_categories.split('|').map(&:to_i)
+    CATEGORIES = Array(SiteSetting.topic_custom_field_categories)
+      .reject { |c| c.blank? }
+      .map(&:to_i)
   end
 
   ##
@@ -63,7 +61,7 @@ after_initialize do
     if !custom_fields[TopicCustomFields::FIELD_NAME].nil?
       custom_fields[TopicCustomFields::FIELD_NAME]
     else
-      nil
+      0
     end
   end
 
@@ -98,11 +96,16 @@ after_initialize do
   #              lib/post_creator.rb
   ##
   on(:topic_created) do |topic, opts, user|
-    topic.send(
-      "#{TopicCustomFields::FIELD_NAME}=".to_sym,
-      opts[TopicCustomFields::FIELD_NAME.to_sym],
-    )
-    topic.save!
+    allowed_groups = SiteSetting.topic_custom_field_allowed_groups.split('|').map { |g| g.strip.to_i }
+    user_groups = user.groups.map(&:id)
+    can_edit = (user_groups & allowed_groups).any?
+    if can_edit
+      topic.send(
+        "#{TopicCustomFields::FIELD_NAME}=".to_sym,
+        opts[TopicCustomFields::FIELD_NAME.to_sym],
+      )
+      topic.save!
+    end
   end
 
   ##
@@ -116,12 +119,17 @@ after_initialize do
   #              lib/post_revisor.rb
   ##
   PostRevisor.track_topic_field(TopicCustomFields::FIELD_NAME.to_sym) do |tc, value|
-    tc.record_change(
-      TopicCustomFields::FIELD_NAME,
-      tc.topic.send(TopicCustomFields::FIELD_NAME),
-      value,
-    )
-    tc.topic.send("#{TopicCustomFields::FIELD_NAME}=".to_sym, value.present? ? value : nil)
+    allowed_groups = SiteSetting.topic_custom_field_allowed_groups.split('|').map { |g| g.strip.to_i }
+    user_groups = tc.user.groups.map(&:id)
+    can_edit = (user_groups & allowed_groups).any?
+    if can_edit
+      tc.record_change(
+        TopicCustomFields::FIELD_NAME,
+        tc.topic.send(TopicCustomFields::FIELD_NAME),
+        value,
+      )
+      tc.topic.send("#{TopicCustomFields::FIELD_NAME}=".to_sym, value.present? ? value : nil)
+    end
   end
 
   ##

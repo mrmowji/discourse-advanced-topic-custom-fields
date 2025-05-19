@@ -42,7 +42,7 @@ export default {
         customFieldValue: alias(`topic.${fieldName}`),
 
         @discourseComputed("customFieldValue")
-        showCustomField: (value) => !!value,
+        showCustomField: (value) => value !== null && value !== undefined,
       });
 
       /*

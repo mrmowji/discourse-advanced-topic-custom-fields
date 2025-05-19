@@ -20,3 +20,9 @@ plugins:
     type: list
     list_type: category
     description: "Categories where the custom field is enabled."
+  topic_custom_field_allowed_groups:
+    default: "staff"
+    client: true
+    type: list
+    list_type: group
+    description: "Groups that are allowed to edit the custom field value."

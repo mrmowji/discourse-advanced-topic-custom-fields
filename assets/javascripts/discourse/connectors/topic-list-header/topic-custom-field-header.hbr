@@ -1,0 +1,3 @@
+<th class="custom-field-header">
+  {{i18n "topic_custom_field.label" field=customFieldName}}
+</th> 

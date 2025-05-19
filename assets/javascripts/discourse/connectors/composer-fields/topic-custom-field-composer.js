@@ -17,6 +17,11 @@ export default class TopicCustomFieldComposer extends Component {
   @alias("args.outletArgs.model") composerModel;
   @alias("composerModel.topic") topic;
 
+  get categoryId() {
+    console.log("Composer model:", this.composerModel);
+    return this.composerModel?.categoryId;
+  }
+
   constructor() {
     super(...arguments);
 

@@ -16,6 +16,11 @@ import { service } from "@ember/service";
 export default class TopicCustomFieldEditTopic extends Component {
   @service siteSettings;
   @alias("siteSettings.topic_custom_field_name") fieldName;
+  
+  get categoryId() {
+    console.log("Args:", this.args);
+    return this.args.outletArgs.model?.categoryId;
+  }
 
   constructor() {
     super(...arguments);
