@@ -5,7 +5,7 @@ import { service } from "@ember/service";
 
 export default class TopicCustomFieldEditTopic extends Component {
   @service siteSettings;
-  @alias("siteSettings.topic_heuristic_value_field_name") fieldName;
+  @alias("siteSettings.topic_priority_field_name") fieldName;
   
   get categoryId() {
     return this.args.outletArgs.model?.categoryId;

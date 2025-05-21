@@ -6,7 +6,7 @@ import { service } from "@ember/service";
 export default class TopicCustomFieldTopicTitle extends Component {
   @service siteSettings;
   @controller topic;
-  @alias("siteSettings.topic_heuristic_value_field_name") fieldName;
+  @alias("siteSettings.topic_priority_field_name") fieldName;
 
   get fieldValue() {
     return this.args.outletArgs.model.get(this.fieldName);
@@ -17,6 +17,6 @@ export default class TopicCustomFieldTopicTitle extends Component {
   }
 
   get isAllowedCategory() {
-    return this.categoryId && this.siteSettings.topic_heuristic_value_field_categories?.split("|").map(c => parseInt(c, 10)).includes(this.categoryId);
+    return this.categoryId && this.siteSettings.topic_priority_field_categories?.split("|").map(c => parseInt(c, 10)).includes(this.categoryId);
   }
 }

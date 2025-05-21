@@ -1,24 +1,24 @@
 plugins:
-  topic_heuristic_value_enabled:
+  topic_priority_enabled:
     default: true
     client: true
-  topic_heuristic_value_field_name:
-    default: 'heuristic_value'
+  topic_priority_field_name:
+    default: 'priority'
     client: true
     hidden: true
-  topic_heuristic_value_field_type:
+  topic_priority_field_type:
     default: 'integer'
     client: true
     hidden: true
-  topic_heuristic_value_field_categories:
+  topic_priority_field_categories:
     default: []
     client: true
     type: list
     list_type: category
-    description: "Categories where the heuristic value is enabled."
-  topic_heuristic_value_field_allowed_groups:
+    description: "Categories where the priority is enabled."
+  topic_priority_field_allowed_groups:
     default: "staff"
     client: true
     type: list
     list_type: group
-    description: "Groups that are allowed to edit the heuristic value."
+    description: "Groups that are allowed to edit the priority."

@@ -5,7 +5,7 @@ import { service } from "@ember/service";
 
 export default class TopicCustomFieldComposer extends Component {
   @service siteSettings;
-  @alias("siteSettings.topic_heuristic_value_field_name") fieldName;
+  @alias("siteSettings.topic_priority_field_name") fieldName;
   @alias("args.outletArgs.model") composerModel;
   @alias("composerModel.topic") topic;
 

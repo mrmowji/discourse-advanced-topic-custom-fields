@@ -7,17 +7,17 @@ const CustomFieldHeaderCell = <template>
   <SortableColumn
     @sortable={{@sortable}}
     @number="false"
-    @order="heuristic_value"
+    @order="priority"
     @activeOrder={{@activeOrder}}
     @changeSort={{@changeSort}}
     @ascending={{@ascending}}
-    @name="topic_heuristic_value.title"
+    @name="topic_priority.title"
   />
 </template>;
 
 const CustomFieldItemCell = <template>
   <td class="custom-field topic-list-data">
-    {{@topic.heuristic_value}}
+    {{@topic.priority}}
   </td>
 </template>;
 
@@ -25,7 +25,7 @@ export default {
   name: "topic-custom-field-intializer",
   initialize(container) {
     const siteSettings = container.lookup("site-settings:main");
-    const fieldName = siteSettings.topic_heuristic_value_field_name;
+    const fieldName = siteSettings.topic_priority_field_name;
 
     withPluginApi("1.37.3", (api) => {
       api.serializeOnCreate(fieldName);
@@ -47,9 +47,9 @@ export default {
       api.registerValueTransformer(
         "topic-list-columns",
         ({ value, context }) => {
-          if (!siteSettings.topic_heuristic_value_enabled) return;
+          if (!siteSettings.topic_priority_enabled) return;
 
-          const allowedCategories = siteSettings.topic_heuristic_value_field_categories;
+          const allowedCategories = siteSettings.topic_priority_field_categories;
           // AI: context.category can be an object or an ID
           const categoryId = context?.category?.id || context?.category;
 

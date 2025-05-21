@@ -1,8 +1,8 @@
 {{#unless this.topic.editingTopic}}
-  {{#if this.siteSettings.topic_heuristic_value_enabled}}
+  {{#if this.siteSettings.topic_priority_enabled}}
     {{#if this.isAllowedCategory}}
       <span>{{i18n
-          "topic_heuristic_value.label"
+          "topic_priority.label"
           field=this.fieldName
           value=this.fieldValue
       }}</span>

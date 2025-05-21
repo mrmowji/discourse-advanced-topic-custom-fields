@@ -9,11 +9,11 @@ import i18n from "discourse-common/helpers/i18n";
 export default class TopicCustomFieldInput extends Component {
   @service siteSettings;
   @service currentUser;
-  @readOnly("siteSettings.topic_heuristic_value_field_name") fieldName;
-  @readOnly("siteSettings.topic_heuristic_value_field_type") fieldType;
-  @readOnly("siteSettings.topic_heuristic_value_field_allowed_groups") allowedGroups;
-  @readOnly("siteSettings.topic_heuristic_value_field_categories") allowedCategories;
-  @readOnly("siteSettings.topic_heuristic_value_enabled") isHeuristicValueEnabled;
+  @readOnly("siteSettings.topic_priority_field_name") fieldName;
+  @readOnly("siteSettings.topic_priority_field_type") fieldType;
+  @readOnly("siteSettings.topic_priority_field_allowed_groups") allowedGroups;
+  @readOnly("siteSettings.topic_priority_field_categories") allowedCategories;
+  @readOnly("siteSettings.topic_priority_enabled") isPriorityEnabled;
 
   get userGroups() {
     return (this.currentUser?.groups || []).map(g => g.id);
@@ -43,7 +43,7 @@ export default class TopicCustomFieldInput extends Component {
   }
 
   get canShowField() {
-    return this.isHeuristicValueEnabled && this.canEditField && this.isAllowedCategory;
+    return this.isPriorityEnabled && this.canEditField && this.isAllowedCategory;
   }
 
   <template>
@@ -62,7 +62,7 @@ export default class TopicCustomFieldInput extends Component {
           @type="number"
           @value={{@fieldValue}}
           placeholder={{i18n
-            "topic_heuristic_value.placeholder"
+            "topic_priority.placeholder"
             field=this.fieldName
           }}
           class="topic-custom-field-input small"
@@ -75,7 +75,7 @@ export default class TopicCustomFieldInput extends Component {
           @type="text"
           @value={{@fieldValue}}
           placeholder={{i18n
-            "topic_heuristic_value.placeholder"
+            "topic_priority.placeholder"
             field=this.fieldName
           }}
           class="topic-custom-field-input large"
@@ -88,7 +88,7 @@ export default class TopicCustomFieldInput extends Component {
           @value={{@fieldValue}}
           {{on "change" (action @onChangeField value="target.value")}}
           placeholder={{i18n
-            "topic_heuristic_value.placeholder"
+            "topic_priority.placeholder"
             field=this.fieldName
           }}
           class="topic-custom-field-textarea"

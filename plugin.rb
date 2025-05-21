@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-# name: discourse-topic-heuristic-value
-# about: Adds the ability to set a heuristic value for topics.
+# name: discourse-topic-priority
+# about: Adds the ability to set a priority for topics.
 # version: 1.0
 # authors: Mojtaba Javan
-# url: https://github.com/mrmowji/discourse-topic-heuristic-value
+# url: https://github.com/mrmowji/discourse-topic-priority
 
 # Forked from https://github.com/pavilionedu/discourse-topic-custom-fields
 
-enabled_site_setting :topic_heuristic_value_enabled
-enabled_site_setting :topic_heuristic_value_field_categories
+enabled_site_setting :topic_priority_enabled
+enabled_site_setting :topic_priority_field_categories
 register_asset "stylesheets/common.scss"
 
 after_initialize do
   module ::TopicCustomFields
-    FIELD_NAME = SiteSetting.topic_heuristic_value_field_name
-    FIELD_TYPE = SiteSetting.topic_heuristic_value_field_type
-    CATEGORIES = Array(SiteSetting.topic_heuristic_value_field_categories)
+    FIELD_NAME = SiteSetting.topic_priority_field_name
+    FIELD_TYPE = SiteSetting.topic_priority_field_type
+    CATEGORIES = Array(SiteSetting.topic_priority_field_categories)
       .reject { |c| c.blank? }
       .map(&:to_i)
   end
@@ -41,8 +41,8 @@ after_initialize do
   end
 
   on(:topic_created) do |topic, opts, user|
-    allowed_groups = SiteSetting.topic_heuristic_value_field_allowed_groups.present? ? 
-      SiteSetting.topic_heuristic_value_field_allowed_groups.split('|').map { |g| g.strip.to_i } : 
+    allowed_groups = SiteSetting.topic_priority_field_allowed_groups.present? ? 
+      SiteSetting.topic_priority_field_allowed_groups.split('|').map { |g| g.strip.to_i } : 
       []
     user_groups = user.groups.map(&:id)
     can_edit = (user_groups & allowed_groups).any?
@@ -56,8 +56,8 @@ after_initialize do
   end
 
   PostRevisor.track_topic_field(TopicCustomFields::FIELD_NAME.to_sym) do |tc, value|
-    allowed_groups = SiteSetting.topic_heuristic_value_field_allowed_groups.present? ? 
-      SiteSetting.topic_heuristic_value_field_allowed_groups.split('|').map { |g| g.strip.to_i } : 
+    allowed_groups = SiteSetting.topic_priority_field_allowed_groups.present? ? 
+      SiteSetting.topic_priority_field_allowed_groups.split('|').map { |g| g.strip.to_i } : 
       []
     user_groups = tc.user.groups.map(&:id)
     can_edit = (user_groups & allowed_groups).any?

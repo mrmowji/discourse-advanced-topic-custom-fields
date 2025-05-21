@@ -1,6 +1,6 @@
-## Discourse Topic Heuristic Value
+## Discourse Topic Priority
 
-This Discourse plugin adds a custom field to topics so you can set a heuristic value for the topics.
+This Discourse plugin adds a custom field to topics so you can set the priority for the topics.
 
 It also shows the field as a column in the topic list and allows you to sort by it.
 

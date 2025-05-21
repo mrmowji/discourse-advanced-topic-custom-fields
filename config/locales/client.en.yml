@@ -1,6 +1,6 @@
 en:
   js:
-    topic_heuristic_value:
-      label: "Heuristic Value: %{value}"
-      placeholder: "Enter a heuristic value"
-      title: "Heuristic Value"
+    topic_priority:
+      label: "Priority: %{value}"
+      placeholder: "Enter a priority"
+      title: "Priority"
