@@ -16,7 +16,7 @@ const CustomFieldHeaderCell = <template>
 </template>;
 
 const CustomFieldItemCell = <template>
-  <td class="custom-field topic-list-data">
+  <td class="custom-field topic-list-data num">
     {{@topic.priority}}
   </td>
 </template>;
@@ -54,7 +54,7 @@ export default {
           const categoryId = context?.category?.id || context?.category;
 
           if (
-            (categoryId && allowedCategories?.split("|").map(c => parseInt(c, 10)).includes(categoryId))
+            (categoryId && allowedCategories?.length > 0 && allowedCategories?.split("|").map(c => parseInt(c, 10)).includes(categoryId))
           ) {
             value.add(
               fieldName,
